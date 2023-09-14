@@ -4,20 +4,18 @@ using DbUser;
 using TechnicalEssementMandiriBE.App_Code;
 using TechnicalEssementMandiriBE.Model;
 using Microsoft.EntityFrameworkCore;
-using System.Collections;
-using static TechnicalEssementMandiriBE.Model.M_User;
 using System.Data;
 
-namespace ptnirvanaindonesiaApi.Controllers
+namespace TechnicalEssementMandiriBE.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
     public class UserController : ControllerBase
     {
-        private readonly UserDataContext _userDataKopiContext;
-        public UserController(UserDataContext userDataKopiContext)
+        private readonly UserDataContext _userDataKopContext;
+        public UserController(UserDataContext userDataContext)
         {
-            _userDataKopiContext = userDataKopiContext;
+            _userDataKopContext = userDataContext;
         }
 
         [HttpGet]
@@ -40,8 +38,8 @@ namespace ptnirvanaindonesiaApi.Controllers
             //                  noktp = pg.FirstOrDefault().noktp,
             //                  namauser = pg.FirstOrDefault().nama_user,
             //              };
-            var datause = from abb in _userDataKopiContext.Users
-                          join abs in _userDataKopiContext.Userlogins on abb.Id_user equals abs.user_id
+            var datause = from abb in _userDataKopContext.Users
+                          join abs in _userDataKopContext.Userlogins on abb.Id_user equals abs.user_id
                           select new { abb, abs.password, abs.username };
             var datajadi = await datause.ToListAsync();
             datajadi.ForEach((e) =>
@@ -54,7 +52,7 @@ namespace ptnirvanaindonesiaApi.Controllers
                     abb.id = Convert.ToDecimal(e.abb.Id_user);
                     abb.noktp = e.abb.noktp;
                     abb.namauser = e.abb.nama_user;
-                    abb.kodereferal = UserCode.Kodereferal(_userDataKopiContext, Convert.ToDecimal(e.abb.Id_user));
+                    abb.kodereferal = UserCode.Kodereferal(_userDataKopContext, Convert.ToDecimal(e.abb.Id_user));
                     datas.Add(abb);
                 });
             return datas;
@@ -70,7 +68,9 @@ namespace ptnirvanaindonesiaApi.Controllers
             try
             {
                 string namauser = string.Empty;
-                decimal getiduser = UserCode.Countid(_userDataKopiContext);
+                decimal getiduser = UserCode.Countid(_userDataKopContext);
+                decimal iduserlogin = UserCode.Countiduserlogin(_userDataKopContext);
+                decimal getidmsvoucher = UserCode.Countidmsreward(_userDataKopContext);
                 User abb = new User();
                 abb.Id_user = getiduser;
                 abb.nama_user = register.nama;
@@ -78,19 +78,20 @@ namespace ptnirvanaindonesiaApi.Controllers
                 abb.email = register.email;
                 abb.no_hp = register.nohp;
                 abb.tgl_input = DateOnly.FromDateTime(DateTime.Today);
-                _userDataKopiContext.Users.Add(abb);
-                _userDataKopiContext.SaveChangesAsync();
+                _userDataKopContext.Users.Add(abb);
+                _userDataKopContext.SaveChanges();
+
                 if (register.nohpreferal != "" || register.kodereferal != "")
                 {
-                    decimal getidmsvoucher = UserCode.Countidmsreward(_userDataKopiContext);
+                    
                     if (register.nohpreferal != "")
                     {
-                        namauser = UserCode.NamaUser(_userDataKopiContext, register.nohpreferal);
+                        namauser = UserCode.NamaUser(_userDataKopContext, register.nohpreferal);
                     }
                     else
                     {
-                        namauser = (from bb in _userDataKopiContext.ms_Vouchers
-                                    join cc in _userDataKopiContext.Users on bb.id_user equals cc.Id_user
+                        namauser = (from bb in _userDataKopContext.ms_Vouchers
+                                    join cc in _userDataKopContext.Users on bb.id_user equals cc.Id_user
                                     select cc.nama_user).FirstOrDefault();
                     }
 
@@ -99,17 +100,18 @@ namespace ptnirvanaindonesiaApi.Controllers
                     ab.id_user = getiduser;
                     ab.kodegenerate = GenerateKodeReferal.Generatekode(namauser);
                     ab.tgl_generate = DateOnly.FromDateTime(DateTime.Today);
-                    _userDataKopiContext.ms_Vouchers.Add(ab);
-                    _userDataKopiContext.SaveChangesAsync();
-                   
+                    _userDataKopContext.ms_Vouchers.Add(ab);
+                    _userDataKopContext.SaveChanges();
                 }
                 UserLogin ass = new UserLogin();
-                ass.id_userlogin = UserCode.Countiduserlogin(_userDataKopiContext);
+                ass.id_userlogin = iduserlogin;
                 ass.user_id = getiduser;
                 ass.username = GenerateKodeReferal.Generateusername(register.nama);
                 ass.password = GenerateKodeReferal.Generatepassword();
-                _userDataKopiContext.Userlogins.Add(ass);
-                _userDataKopiContext.SaveChangesAsync();
+                _userDataKopContext.Userlogins.Add(ass);
+                
+                _userDataKopContext.SaveChanges();
+
                 return StatusCode(StatusCodes.Status200OK, "sukses");
             }
             catch (Exception ex)
@@ -126,11 +128,11 @@ namespace ptnirvanaindonesiaApi.Controllers
         {
             try
             {
-                var checkdata = await _userDataKopiContext.Users.Where(x => x.Id_user == id_user).FirstOrDefaultAsync();
+                var checkdata = await _userDataKopContext.Users.Where(x => x.Id_user == id_user).FirstOrDefaultAsync();
                 if (checkdata != null)
                 {
-                    _userDataKopiContext.Remove(checkdata);
-                    _userDataKopiContext.SaveChangesAsync();
+                    _userDataKopContext.Remove(checkdata);
+                    _userDataKopContext.SaveChangesAsync();
                 }
                 return StatusCode(StatusCodes.Status200OK, "sukses");
             }
@@ -150,11 +152,11 @@ namespace ptnirvanaindonesiaApi.Controllers
         {
             try
             {
-                var checkdata = await _userDataKopiContext.Users.Where(x => x.Id_user == Updateuser.id).FirstOrDefaultAsync();
+                var checkdata = await _userDataKopContext.Users.Where(x => x.Id_user == Updateuser.id).FirstOrDefaultAsync();
                 if (checkdata != null)
                 {
                     checkdata.nama_user = Updateuser.namauser;
-                    _userDataKopiContext.SaveChangesAsync();
+                    _userDataKopContext.SaveChangesAsync();
                 }
                 return StatusCode(StatusCodes.Status200OK, "sukses");
             }
@@ -174,7 +176,7 @@ namespace ptnirvanaindonesiaApi.Controllers
         {
             List<M_User.DataUserall> datas = new List<M_User.DataUserall>();
            
-            var datajadi = await _userDataKopiContext.Users.Select(x=> new {x.noktp,x.no_hp,x.email,x.Id_user,x.nama_user}).ToListAsync();
+            var datajadi = await _userDataKopContext.Users.Select(x=> new {x.noktp,x.no_hp,x.email,x.Id_user,x.nama_user}).ToListAsync();
             datajadi.ForEach((e) =>
             {
                 M_User.DataUserall abb = new M_User.DataUserall();
