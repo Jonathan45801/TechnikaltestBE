@@ -1,0 +1,3 @@
+Topik nya adalah User referal
+Topik ini saya bawakan dengan alur sistem
+user mendaftarkan diri,user tersebut membawa teman dan teman nya mendaftarkan dengan menggunakan nohp atau kode referal si user tersebut,kalau kode referal tidak punya maka di gantikan dengan nohp nanti si User akan mendapatkan kode referal setelah teman nya mendaftarkan diri dengan referal nohp si User
