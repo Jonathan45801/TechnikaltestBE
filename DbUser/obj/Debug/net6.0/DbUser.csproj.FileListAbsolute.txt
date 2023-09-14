@@ -1,0 +1,14 @@
+E:\ProjectApi\TechnicalEssementMandiriBE\DbUser\bin\Debug\net6.0\DbUser.deps.json
+E:\ProjectApi\TechnicalEssementMandiriBE\DbUser\bin\Debug\net6.0\DbUser.runtimeconfig.json
+E:\ProjectApi\TechnicalEssementMandiriBE\DbUser\bin\Debug\net6.0\DbUser.dll
+E:\ProjectApi\TechnicalEssementMandiriBE\DbUser\bin\Debug\net6.0\DbUser.pdb
+E:\ProjectApi\TechnicalEssementMandiriBE\DbUser\obj\Debug\net6.0\DbUser.csproj.AssemblyReference.cache
+E:\ProjectApi\TechnicalEssementMandiriBE\DbUser\obj\Debug\net6.0\DbUser.GeneratedMSBuildEditorConfig.editorconfig
+E:\ProjectApi\TechnicalEssementMandiriBE\DbUser\obj\Debug\net6.0\DbUser.AssemblyInfoInputs.cache
+E:\ProjectApi\TechnicalEssementMandiriBE\DbUser\obj\Debug\net6.0\DbUser.AssemblyInfo.cs
+E:\ProjectApi\TechnicalEssementMandiriBE\DbUser\obj\Debug\net6.0\DbUser.csproj.CoreCompileInputs.cache
+E:\ProjectApi\TechnicalEssementMandiriBE\DbUser\obj\Debug\net6.0\DbUser.dll
+E:\ProjectApi\TechnicalEssementMandiriBE\DbUser\obj\Debug\net6.0\refint\DbUser.dll
+E:\ProjectApi\TechnicalEssementMandiriBE\DbUser\obj\Debug\net6.0\DbUser.pdb
+E:\ProjectApi\TechnicalEssementMandiriBE\DbUser\obj\Debug\net6.0\DbUser.genruntimeconfig.cache
+E:\ProjectApi\TechnicalEssementMandiriBE\DbUser\obj\Debug\net6.0\ref\DbUser.dll
